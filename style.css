@@ -180,3 +180,14 @@ body{
 }
 
 
+@media only screen and (max-width: 1000px){
+    .future-forecast{
+        justify-content: start;
+        align-items: none;
+        overflow-y: scroll;
+    }
+    
+}
+    
+
+
