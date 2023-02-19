@@ -9,7 +9,7 @@ const currentTempEl = document.getElementById('current-temp');
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const API_KEY = '4847fa52c238db745a5b413b95c81bd3';
+let API_KEY = "fc195845b77e2da7da10ab3da14fb335";
 
 setInterval(() => {
     const time = new Date();
@@ -17,7 +17,7 @@ setInterval(() => {
     const date = time.getDate();
     const day = time.getDay();
     const hour = time.getHours();
-    const hoursIn12HrFormat = hour >= 13 ? hour %12: hour
+    const hoursIn12HrFormat = hour >= 13 ? hour %24: hour
     const minutes = time.getMinutes();
     const ampm = hour >=12 ? 'PM' : 'AM'
 
@@ -25,12 +25,13 @@ setInterval(() => {
     dateEl.innerHTML = days[day] + ', ' + date+  ' ' + months[month]
 }, 1000);
 
+// let {latitude, longitude} = success.coords;
 getWeatherData()
 function getWeatherData() {
     navigator.geolocation.getCurrentPosition((success) => {
         console.log(success);
 
-        fetch ("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/London?unitGroup=uk&key=MY7QQT78G5GFNHASXZ7FUYXJX&contentType=json")
+        fetch (`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/london?key=MY7QQT78G5GFNHASXZ7FUYXJX`)
         .then(res => res.json())
         .then(data =>{
             console.log(data)
@@ -41,11 +42,10 @@ function getWeatherData() {
     })
     
 }
-moment().format("dddd, MMMM Do, h:mm:ss a");
+moment().format("dddd, MMMM Do, HH:MM:ss a");
 
 function showWeatherData(data) {
-    let {temp, humidity, pressure, sunrise, sunset, windspeed, feelslike, conditions} = data.currentConditions;
-
+    let {temp, humidity, pressure, windspeed, feelslike, conditions} = data.currentConditions;
     currentWeatherItemsEl.innerHTML = 
   
 ` 
@@ -71,7 +71,7 @@ function showWeatherData(data) {
 </div>
 
 <div class="weather-item">
-    <div>Conditions</div>
+    <div>Conditions:</div>
     <div>${conditions}</div>
 </div>
 
@@ -87,15 +87,18 @@ data.days.forEach((day, idx) => {
     }else{
         otherDayForecast += `
         <div class="weather-forecast-item"> 
-        <div class="day">${window.moment(day.dt*1000).format('dddd')}</div>
+        <div class="day">${window.moment(day.datetime*1000).format('ddd')}</div>
         <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="weather-icon" class="w-icon">    
-        <div class="temp">Day 12.8- &#176; C</div>
-        <div class="temp">Night 7.4- &#176; C</div>
+        <div class="temp">Day - ${day.temp}&#176; C</div>
+       
     </div>
-    `
-    }
-})
     
-}
+        `
+    }
+
+})
 
 weatherForecastEl.innerHTML = otherDayForecast;
+
+}
+
