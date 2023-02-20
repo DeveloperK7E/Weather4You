@@ -9,19 +9,17 @@ const currentTempEl = document.getElementById('current-temp');
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-let API_KEY = "fc195845b77e2da7da10ab3da14fb335";
-
 setInterval(() => {
     const time = new Date();
     const month = time.getMonth();
     const date = time.getDate();
     const day = time.getDay();
     const hour = time.getHours();
-    const hoursIn12HrFormat = hour >= 13 ? hour %24: hour
+    const hoursIn12HrFormat = hour >= 13 ? hour %12: hour
     const minutes = time.getMinutes();
     const ampm = hour >=12 ? 'PM' : 'AM'
 
-    timeEl.innerHTML = hoursIn12HrFormat + ':' + minutes+  ' ' + `<span id="am-pm">${ampm}</span>`
+    timeEl.innerHTML = (hoursIn12HrFormat < 10? '0' + hoursIn12HrFormat: hoursIn12HrFormat) + ':' + (minutes < 10? '0'+minutes: minutes)+  ' ' + `<span id="am-pm">${ampm}</span>`
     dateEl.innerHTML = days[day] + ', ' + date+  ' ' + months[month]
 }, 1000);
 
@@ -46,6 +44,11 @@ moment().format("dddd, MMMM Do, HH:MM:ss a");
 
 function showWeatherData(data) {
     let {temp, humidity, pressure, windspeed, feelslike, conditions} = data.currentConditions;
+
+    timezone.innerHTML = data.timezone;
+    countryEl.innerHTML = data.description,
+
+
     currentWeatherItemsEl.innerHTML = 
   
 ` 
@@ -83,13 +86,24 @@ function showWeatherData(data) {
 let otherDayForecast = ''
 data.days.forEach((day, idx) => {
     if(idx == 0){
+        currentTempEl.innerHTML = `
+        <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="weather-icon" class="w-icon">
+        <div class="others">
+            <div class="day">${window.moment(day.datetime*1000).format('ddd')}</div>
+            <div class="temp">${day.temp} &#176;C</div>
+            
+        </div>
+        
+        
+        
+        `
 
     }else{
         otherDayForecast += `
         <div class="weather-forecast-item"> 
         <div class="day">${window.moment(day.datetime*1000).format('ddd')}</div>
         <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="weather-icon" class="w-icon">    
-        <div class="temp">Day - ${day.temp}&#176; C</div>
+        <div class="temp">${day.temp}&#176;C</div>
        
     </div>
     
