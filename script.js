@@ -54,11 +54,11 @@ function showWeatherData(data) {
 ` 
 <div class="weather-item">
     <div>Temperature</div>
-    <div>${temp} &#176;C</div>
+    <div>${temp} &#176;F</div>
 </div>
 <div class="weather-item">
     <div>Feels Like</div>
-    <div>${feelslike} &#176;C</div>
+    <div>${feelslike} &#176;F</div>
 </div>
     <div class="weather-item">
     <div>Humidity</div>
@@ -90,7 +90,7 @@ data.days.forEach((day, idx) => {
         <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="weather-icon" class="w-icon">
         <div class="others">
             <div class="day">${window.moment(day.datetime*1000).format('ddd')}</div>
-            <div class="temp">${day.temp} &#176;C</div>
+            <div class="temp">${day.temp} &#176;F</div>
             
         </div>
         
@@ -103,7 +103,7 @@ data.days.forEach((day, idx) => {
         <div class="weather-forecast-item"> 
         <div class="day">${window.moment(day.datetime*1000).format('ddd')}</div>
         <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="weather-icon" class="w-icon">    
-        <div class="temp">${day.temp}&#176;C</div>
+        <div class="temp">${day.temp}&#176;F</div>
        
     </div>
     
